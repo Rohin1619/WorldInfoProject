@@ -1,0 +1,20 @@
+
+#header {
+
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#header h1 {
+  font-size: 36px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: bold;
+
+}
+
+#header h1 a {
+  color: black;
+  text-decoration: none;
+}
