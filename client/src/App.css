@@ -27,6 +27,7 @@ body {
 }
 
 .country {
+  padding: 2px;
   color: black;
   display: flex;
   flex-direction: column;

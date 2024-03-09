@@ -20,18 +20,20 @@ const Countries = () => {
 
   useEffect(() => {
     if (data && !loading) {
-      setCountriesData(data.sort((a, b) => a.name.common.localeCompare(b.name.common)));
+      setCountriesData(
+        data.sort((a, b) => a.name.common.localeCompare(b.name.common))
+      );
     }
   }, [data, loading]);
 
   useEffect(() => {
     if (data && !loading) {
-      setCountriesData((prevData) => prevData.map(
-        (country, index) => ({
+      setCountriesData((prevData) =>
+        prevData.map((country, index) => ({
           ...country,
           images: IMAGES[index],
-        })
-      ));
+        }))
+      );
     }
   }, [data, loading]);
 
@@ -45,7 +47,6 @@ const Countries = () => {
 
   const handleRowClick = useCallback((e, country) => {
     e.preventDefault();
-    console.log(e.target, country);
     return navigate(`/${country.name.common}`, { state: country });
   });
 

@@ -29,7 +29,7 @@ const Country = ({ updateHeader }) => {
   } = location.state;
 
   const { googleMaps } = maps;
-  const { bgImg, otherImg } = images;
+  const { bgImg, otherImg, foods } = images;
 
   return (
     <div className="country container p-3 mt-3">
@@ -43,10 +43,26 @@ const Country = ({ updateHeader }) => {
                 className="col-lg-3 col-md-6 col-sm-12 text-center"
                 key={index}
               >
-                <img src={image} alt="" className="img-fluid mb-3" />
+                <img
+                  src={image}
+                  alt=""
+                  className="img-fluid mb-3"
+                  onClick={() => window.open(image, "_blank")}
+                />
               </div>
             ))}
         </div>
+        <small>
+          Source:{" "}
+          <a
+            href="https://unsplash.com/"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            {" "}
+            Unsplash{" "}
+          </a>
+        </small>
         <hr />
         <div className="row w-100 mt-3">
           <div className="col-lg-6 col-md-6 col-sm-12">
@@ -147,6 +163,45 @@ const Country = ({ updateHeader }) => {
                 }}
                 style={{ cursor: "pointer" }}
               />
+            </div>
+          </div>
+        </div>
+        <div className="row mt-3">
+          <div className="card p-3">
+            <div className="card-title">
+              <h3>Popular Food</h3>
+            </div>
+            <div className="card-body">
+              <div className="row">
+                <div className="row row-cols-1 row-cols-md-3 g-4">
+                  {foods.map((food, index) => (
+                    <div className="col" key={index}>
+                      <div className="card h-100" style={{ border: "none" }}>
+                        <img src={food} className="card-img-top" alt="food" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <small className="float-right">
+                Source:{" "}
+                <a
+                  href="https://www.chefspencil.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {" "}
+                  Chefspencil
+                </a>
+                ,{" "}
+                <a
+                  href="https://unsplash.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Unsplash
+                </a>
+              </small>
             </div>
           </div>
         </div>
