@@ -1,2 +1,3 @@
 # RestCountries
- Infographic website which restcountries free api resources
+ Infographic website which uses restcountries free api resources. 
+Language used ReactJS. 
