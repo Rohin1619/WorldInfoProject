@@ -65,7 +65,7 @@ const Country = ({ updateHeader }) => {
         </small>
         <hr />
         <div className="row w-100 mt-3">
-          <div className="col-lg-6 col-md-6 col-sm-12">
+          <div className={`${coatOfArms.png ? "col-lg-6" : "col-lg-12"} col-md-6 col-sm-12`}>
             <div className="card">
               <div className="card-body text-center">
                 <h4 className="card-title">Flag</h4>
@@ -78,7 +78,7 @@ const Country = ({ updateHeader }) => {
               </div>
             </div>
           </div>
-          <div className="col-lg-6 col-md-6 col-sm-12">
+          {coatOfArms.png && <div className="col-lg-6 col-md-6 col-sm-12">
             <div className="card">
               <div className="card-body text-center">
                 <h4 className="card-title">Coat of Arms</h4>
@@ -90,7 +90,7 @@ const Country = ({ updateHeader }) => {
                 />
               </div>
             </div>
-          </div>
+          </div>}
         </div>
         <hr />
         <div className="row w-100 mt-3 d-flex flew-row justify-content-center align-items-center h-100">
@@ -169,7 +169,7 @@ const Country = ({ updateHeader }) => {
         <div className="row mt-3">
           <div className="card p-3">
             <div className="card-title">
-              <h3>Popular Food</h3>
+              <h3 className="text-center">Popular Food</h3>
             </div>
             <div className="card-body">
               <div className="row">

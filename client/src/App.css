@@ -27,7 +27,6 @@ body {
 }
 
 .country {
-  padding: 2px;
   color: black;
   display: flex;
   flex-direction: column;
@@ -42,21 +41,36 @@ body {
     align-items: center;
 
 
-    img{
+    img {
       width: 200px;
       height: 200px;
       object-fit: cover;
     }
 
+    img {
+      transform: 1;
+      transition: transform 1s ease-in-out;
+    }
+
     img:hover {
-      transform: scale(1.4);
-      filter: grayscale(10%);
-      transition: 1s;
-      height: auto;
-      width: auto;
-      z-index: 1;
-      cursor: pointer;
-      position: relative;
+      transform: scale(1.1);
+    }
+
+    img:hover:not(:hover):not(:focus) {
+      transition: transform 3s ease-in-out;
+    }
+
+    img:hover:not(:focus):not(:active):not(:target):not(:hover):not(:focus):not(:active):nth-child(1) {
+      transform: 1;
+      transition: transform 1s ease-in-out;
+    }
+
+    img:hover:focus {
+      transition: none;
+    }
+
+    img:hover:active {
+      transition: none;
     }
   }
 

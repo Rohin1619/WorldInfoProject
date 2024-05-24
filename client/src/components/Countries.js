@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { IMAGES, REST_COUNTRIES_URL } from "../helpers/constants";
 import useAxiosFetch from "../shared/useAxiosFetch";
-import { Link, Route, useNavigate } from "react-router-dom";
-import Country from "./Country";
 
 const Countries = () => {
   const navigate = useNavigate();
@@ -88,7 +87,6 @@ const Countries = () => {
           );
         })}
       </div>
-
       <div className="row">
         <ul>
           {!loading &&
