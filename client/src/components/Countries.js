@@ -9,9 +9,9 @@ const Countries = () => {
   const [regionFilter, setRegionFilter] = useState("All");
   const [countriesData, setCountriesData] = useState([]);
 
-  const { data, loading, error } = useAxiosFetch(
+  const { data, loading } = useAxiosFetch(
     REST_COUNTRIES_URL,
-    {},
+    {}, 
     0,
     false,
     true
@@ -47,7 +47,7 @@ const Countries = () => {
   const handleRowClick = useCallback((e, country) => {
     e.preventDefault();
     return navigate(`/${country.name.common}`, { state: country });
-  });
+  }, [navigate]);
 
   const region = useMemo(
     () => [
