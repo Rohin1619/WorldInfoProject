@@ -4,15 +4,6 @@ import BreadCrumbs from "../shared/Breadcrumbs";
 
 const Country = ({ updateHeader }) => {
   const location = useLocation();
-
-  useEffect(() => {
-    updateHeader(
-      <BreadCrumbs
-        crumbs={[{ path: "/", title: "Countries" }, { title: name.common }]}
-      />
-    );
-  }, [name.common]);
-
   const {
     name,
     area,
@@ -27,6 +18,17 @@ const Country = ({ updateHeader }) => {
     latlng,
     maps,
   } = location.state;
+
+  
+  useEffect(() => {
+    updateHeader(
+      <BreadCrumbs
+        crumbs={[{ path: "/", title: "Countries" }, { title: name.common }]}
+      />
+    );
+  }, [name.common, updateHeader]);
+
+
 
   const { googleMaps } = maps;
   const { otherImg, foods } = images;
