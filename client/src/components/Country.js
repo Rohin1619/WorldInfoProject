@@ -11,7 +11,7 @@ const Country = ({ updateHeader }) => {
         crumbs={[{ path: "/", title: "Countries" }, { title: name.common }]}
       />
     );
-  }, []);
+  }, [name.common]);
 
   const {
     name,
@@ -29,7 +29,7 @@ const Country = ({ updateHeader }) => {
   } = location.state;
 
   const { googleMaps } = maps;
-  const { bgImg, otherImg, foods } = images;
+  const { otherImg, foods } = images;
 
   return (
     <div className="country container p-3 mt-3">
