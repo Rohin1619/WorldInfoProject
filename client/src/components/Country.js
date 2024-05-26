@@ -126,16 +126,16 @@ const Country = ({ updateHeader }) => {
                       <li className="list-group-item d-flex align-items-center">
                         <i className="bi bi-translate mr-2"></i>
                         <strong>Languages:&nbsp;</strong>{" "}
-                        {Object.values(languages)
-                          .map((language) => language)
-                          .join(", ")}
+                        {languages ?
+                          Object.values(languages).map((language) => language)
+                          .join(", ") : "N/A"}
                       </li>
                       <li className="list-group-item d-flex align-items-center">
                         <i className="bi bi-currency-dollar mr-2"></i>
                         <strong>Currencies:&nbsp;</strong>
-                        {Object.values(currencies)
-                          .map((currency) => currency.name)
-                          .join(", ")}
+                        {currencies ?
+                          Object.values(currencies).map((currency) => currency.name)
+                          .join(", ") : "N/A"}
                       </li>
                     </ul>
                   </div>
@@ -159,7 +159,7 @@ const Country = ({ updateHeader }) => {
             <div className="card p-3">
               <img
                 src={`https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/geojson(%7B%22type%22%3A%22Point%22%2C%22coordinates%22%3A%5B${latlng[1]}%2C${latlng[0]}%5D%7D)/${latlng[1]},${latlng[0]},4,0/600x400?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
-                alt=""
+                alt="N/A"
                 onClick={() => {
                   window.open(googleMaps);
                 }}
