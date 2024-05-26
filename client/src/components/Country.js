@@ -1,7 +1,8 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import BreadCrumbs from "../shared/Breadcrumbs";
-import axios from "axios";
 
 const Country = ({ updateHeader }) => {
   const location = useLocation();
@@ -64,7 +65,7 @@ const Country = ({ updateHeader }) => {
   }, [name.common]);
 
   const { googleMaps } = maps;
-  const { otherImg, foods } = images;
+  const { foods } = images;
 
   return (
     <div className="country container p-3 mt-3">
@@ -72,15 +73,17 @@ const Country = ({ updateHeader }) => {
         <h1>{name.common}</h1>
         <h4>An introduction to the country of {name.common}</h4>
         <div className="row img-div mt-3 p-3">
-          {otherImg &&
-            otherImg.map((image, index) => (
+          {loading && <FontAwesomeIcon icon="spinner" spin />}
+          {error && "Error"}
+          {unsplashImages &&
+            unsplashImages.map((image, index) => (
               <div
                 className="col-lg-3 col-md-6 col-sm-12 text-center"
-                key={index}
+                key={image.id}
               >
                 <img
-                  src={image}
-                  alt=""
+                  src={image.urls.small}
+                  alt={image.alt_description}
                   className="img-fluid mb-3"
                   onClick={() => window.open(image, "_blank")}
                 />
