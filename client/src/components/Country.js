@@ -1,4 +1,6 @@
-import React, { useEffect } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import BreadCrumbs from "../shared/Breadcrumbs";
 
@@ -18,8 +20,10 @@ const Country = ({ updateHeader }) => {
     latlng,
     maps,
   } = location.state;
+  const [loading, setLoading] = useState(false);
+  const [unsplashImages, setUnsplashImages] = useState([]);
+  const [error, setError] = useState(false);
 
-  
   useEffect(() => {
     updateHeader(
       <BreadCrumbs
@@ -28,10 +32,40 @@ const Country = ({ updateHeader }) => {
     );
   }, [name.common, updateHeader]);
 
+  useEffect(() => {
+    const fetchImages = async () => {
+      const ACCESS_KEY = process.env.REACT_APP_UNSPLASH_ACCESS_KEY;
+      setLoading(true);
+      setError(false);
+      
+      try {
+        const response = await axios.get(
+          "https://api.unsplash.com/search/photos",
+          {
+            params: {
+              query: name.common,
+              per_page: 3,
+            },
+            headers: {
+              Authorization: `Client-ID ${ACCESS_KEY}`,
+            },
+          }
+        );
 
+        setUnsplashImages(response.data.results);
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (!name.common) return;
+    fetchImages();
+  }, [name.common]);
 
   const { googleMaps } = maps;
-  const { otherImg, foods } = images;
+  const { foods } = images;
 
   return (
     <div className="country container p-3 mt-3">
@@ -39,15 +73,17 @@ const Country = ({ updateHeader }) => {
         <h1>{name.common}</h1>
         <h4>An introduction to the country of {name.common}</h4>
         <div className="row img-div mt-3 p-3">
-          {otherImg &&
-            otherImg.map((image, index) => (
+          {loading && <FontAwesomeIcon icon="spinner" spin />}
+          {error && "Error"}
+          {unsplashImages &&
+            unsplashImages.map((image, index) => (
               <div
                 className="col-lg-3 col-md-6 col-sm-12 text-center"
-                key={index}
+                key={image.id}
               >
                 <img
-                  src={image}
-                  alt=""
+                  src={image.urls.small}
+                  alt={image.alt_description}
                   className="img-fluid mb-3"
                   onClick={() => window.open(image, "_blank")}
                 />
@@ -67,7 +103,11 @@ const Country = ({ updateHeader }) => {
         </small>
         <hr />
         <div className="row w-100 mt-3">
-          <div className={`${coatOfArms.png ? "col-lg-6" : "col-lg-12"} col-md-6 col-sm-12`}>
+          <div
+            className={`${
+              coatOfArms.png ? "col-lg-6" : "col-lg-12"
+            } col-md-6 col-sm-12`}
+          >
             <div className="card">
               <div className="card-body text-center">
                 <h4 className="card-title">Flag</h4>
@@ -80,19 +120,21 @@ const Country = ({ updateHeader }) => {
               </div>
             </div>
           </div>
-          {coatOfArms.png && <div className="col-lg-6 col-md-6 col-sm-12">
-            <div className="card">
-              <div className="card-body text-center">
-                <h4 className="card-title">Coat of Arms</h4>
-                <img
-                  src={coatOfArms.png}
-                  alt="Not Found"
-                  style={{ height: "180px" }}
-                  className="img-fluid"
-                />
+          {coatOfArms.png && (
+            <div className="col-lg-6 col-md-6 col-sm-12">
+              <div className="card">
+                <div className="card-body text-center">
+                  <h4 className="card-title">Coat of Arms</h4>
+                  <img
+                    src={coatOfArms.png}
+                    alt="Not Found"
+                    style={{ height: "180px" }}
+                    className="img-fluid"
+                  />
+                </div>
               </div>
             </div>
-          </div>}
+          )}
         </div>
         <hr />
         <div className="row w-100 mt-3 d-flex flew-row justify-content-center align-items-center h-100">
@@ -126,16 +168,20 @@ const Country = ({ updateHeader }) => {
                       <li className="list-group-item d-flex align-items-center">
                         <i className="bi bi-translate mr-2"></i>
                         <strong>Languages:&nbsp;</strong>{" "}
-                        {Object.values(languages)
-                          .map((language) => language)
-                          .join(", ")}
+                        {languages
+                          ? Object.values(languages)
+                              .map((language) => language)
+                              .join(", ")
+                          : "N/A"}
                       </li>
                       <li className="list-group-item d-flex align-items-center">
                         <i className="bi bi-currency-dollar mr-2"></i>
                         <strong>Currencies:&nbsp;</strong>
-                        {Object.values(currencies)
-                          .map((currency) => currency.name)
-                          .join(", ")}
+                        {currencies
+                          ? Object.values(currencies)
+                              .map((currency) => currency.name)
+                              .join(", ")
+                          : "N/A"}
                       </li>
                     </ul>
                   </div>
@@ -159,7 +205,7 @@ const Country = ({ updateHeader }) => {
             <div className="card p-3">
               <img
                 src={`https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/geojson(%7B%22type%22%3A%22Point%22%2C%22coordinates%22%3A%5B${latlng[1]}%2C${latlng[0]}%5D%7D)/${latlng[1]},${latlng[0]},4,0/600x400?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
-                alt=""
+                alt="N/A"
                 onClick={() => {
                   window.open(googleMaps);
                 }}

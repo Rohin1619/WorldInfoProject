@@ -36,10 +36,6 @@ const Countries = () => {
     }
   }, [data, loading]);
 
-  useEffect(() => {
-    console.log(countriesData);
-  }, [countriesData]);
-
   const handleNameFilter = useCallback((e) => {
     setNameFilter(e.target.value);
   }, []);
