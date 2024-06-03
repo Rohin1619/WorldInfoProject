@@ -1,19 +1,17 @@
-import React from 'react';
+import { Box, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
+import React from 'react';
 
-/**
- * Component for the header bar.
- * Title will be in a h1 element, and can be a component or string.
- */
-const Header = props => {
-    const { title } = props;
+const Header = ({ title }) => {
     return (
-        <header id="header">
-            <h1>{title}</h1>
-        </header>
+      <Box sx={{ padding: '10px 0'}}>
+        <Typography variant="h4" component="h1">
+          {title}
+        </Typography>
+      </Box>
     );
-};
-
+  };
+  
 Header.propTypes = {
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired
 };

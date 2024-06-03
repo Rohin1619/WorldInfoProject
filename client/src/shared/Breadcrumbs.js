@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
-
+import React from "react";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDoubleRight } from "@fortawesome/free-solid-svg-icons";
+import { useTheme } from "@mui/material/styles";
 
 /**
  * Handles creation of breadcrumb links in the header bar for nested routes.
@@ -12,42 +12,44 @@ import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
  */
 
 const BreadCrumbs = ({ crumbs }) => {
-    const crumbLength = crumbs.length;
-    return (
-        <React.Fragment>
-            {crumbs.map((c, i) => (
-                <React.Fragment key={`${c.title}f1`}>
-                    {c.path ? (
-                        <Link
-                            key={`${c.title}l`}
-                            to={c.state ? { pathname: c.path, state: c.state } : c.path}
-                        >
-                            {c.title}
-                        </Link>
-                    ) : (
-                        <span key={`${c.title}s`}>{c.title}</span>
-                    )}
-                    {crumbLength !== i + 1 && (
-                        <React.Fragment key={`${c.title}f2`}>
-                            {` `}
-                            <FontAwesomeIcon key={`${c.title}i`} icon={faAngleDoubleRight} />
-                            {` `}
-                        </React.Fragment>
-                    )}
-                </React.Fragment>
-            ))}
+  const crumbLength = crumbs.length;
+  const theme = useTheme();
+  return (
+    <React.Fragment>
+      {crumbs.map((c, i) => (
+        <React.Fragment key={`${c.title}f1`}>
+          {c.path ? (
+            <Link
+              style={{ textDecoration: "none" , color: theme.palette.primary.main}}
+              key={`${c.title}l`}
+              to={c.state ? { pathname: c.path, state: c.state } : c.path}
+            >
+              {c.title}
+            </Link>
+          ) : (
+            <span key={`${c.title}s`}>{c.title}</span>
+          )}
+          {crumbLength !== i + 1 && (
+            <React.Fragment key={`${c.title}f2`}>
+              {` `}
+              <FontAwesomeIcon key={`${c.title}i`} icon={faAngleDoubleRight} />
+              {` `}
+            </React.Fragment>
+          )}
         </React.Fragment>
-    );
+      ))}
+    </React.Fragment>
+  );
 };
 
 BreadCrumbs.propTypes = {
-    crumbs: PropTypes.arrayOf(
-        PropTypes.shape({
-            path: PropTypes.string,
-            title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-            state: PropTypes.shape({}) // State to pass through link
-        })
-    ).isRequired
+  crumbs: PropTypes.arrayOf(
+    PropTypes.shape({
+      path: PropTypes.string,
+      title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+      state: PropTypes.shape({}), // State to pass through link
+    })
+  ).isRequired,
 };
 
 export default BreadCrumbs;

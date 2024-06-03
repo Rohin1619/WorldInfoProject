@@ -1,8 +1,43 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  Grid,
+  Link,
+  Typography,
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import BreadCrumbs from "../shared/Breadcrumbs";
+
+const useStyles = makeStyles((theme) => ({
+  countryContainer: {
+    marginTop: theme.spacing(3),
+  },
+  cardMedia: {
+    height: 200,
+  },
+  flag:{
+    width: "100%",
+    height: "250px",
+    objectFit: "contain",
+    objectPosition: "center",
+  },
+  cardTitle: {
+    fontWeight: "bold",
+    marginBottom: theme.spacing(2),
+  },
+  mapImage: {
+    cursor: "pointer",
+  },
+  foodCard: {
+    marginTop: theme.spacing(3),
+  },
+}));
 
 const Country = ({ updateHeader }) => {
   const location = useLocation();
@@ -20,6 +55,7 @@ const Country = ({ updateHeader }) => {
     latlng,
     maps,
   } = location.state;
+  const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [unsplashImages, setUnsplashImages] = useState([]);
   const [error, setError] = useState(false);
@@ -37,7 +73,7 @@ const Country = ({ updateHeader }) => {
       const ACCESS_KEY = process.env.REACT_APP_UNSPLASH_ACCESS_KEY;
       setLoading(true);
       setError(false);
-      
+
       try {
         const response = await axios.get(
           "https://api.unsplash.com/search/photos",
@@ -68,193 +104,185 @@ const Country = ({ updateHeader }) => {
   const { foods } = images;
 
   return (
-    <div className="country container p-3 mt-3">
-      <div className="row d-flex flex-column align-items-center text-dark">
-        <h1>{name.common}</h1>
-        <h4>An introduction to the country of {name.common}</h4>
-        <div className="row img-div mt-3 p-3">
-          {loading && <FontAwesomeIcon icon="spinner" spin />}
-          {error && "Error"}
-          {unsplashImages &&
-            unsplashImages.map((image, index) => (
-              <div
-                className="col-lg-3 col-md-6 col-sm-12 text-center"
-                key={image.id}
-              >
-                <img
-                  src={image.urls.small}
-                  alt={image.alt_description}
-                  className="img-fluid mb-3"
-                  onClick={() => window.open(image, "_blank")}
+    <Box className={classes.countryContainer}>
+      <Typography variant="h3">{name.common}</Typography>
+      <Typography variant="h5" gutterBottom>
+        An introduction to the country of {name.common}
+      </Typography>
+      <Grid container spacing={3} justifyContent="center" alignItems="center">
+        {loading ? (
+          <CircularProgress />
+        ) : error ? (
+          <Typography variant="body1">Error</Typography>
+        ) : (
+          unsplashImages.map((image, index) => (
+            <Grid item key={index} xs={12} md={4}>
+              <Card>
+                <CardMedia
+                  className={classes.cardMedia}
+                  image={image.urls.small}
+                  title={image.alt_description}
+                  onClick={() => window.open(image.urls.full, "_blank")}
                 />
-              </div>
-            ))}
-        </div>
-        <small>
-          Source:{" "}
-          <a
-            href="https://unsplash.com/"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            {" "}
-            Unsplash{" "}
-          </a>
-        </small>
-        <hr />
-        <div className="row w-100 mt-3">
-          <div
-            className={`${
-              coatOfArms.png ? "col-lg-6" : "col-lg-12"
-            } col-md-6 col-sm-12`}
-          >
-            <div className="card">
-              <div className="card-body text-center">
-                <h4 className="card-title">Flag</h4>
-                <img
-                  src={flags.png}
-                  alt=""
-                  style={{ height: "180px" }}
-                  className="img-fluid"
+              </Card>
+            </Grid>
+          ))
+        )}
+      </Grid>
+      <Typography variant="body2">
+        Source:{" "}
+        <Link
+          href="https://unsplash.com/"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          Unsplash
+        </Link>
+      </Typography>
+      <hr />
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Card>
+            <CardContent>
+              <Typography variant="h4" className={classes.cardTitle}>
+                Flag
+              </Typography>
+              <CardMedia
+                className={classes.flag}
+                image={flags.png}
+                title={`${name.common} Flag`}
+              />
+            </CardContent>
+          </Card>
+        </Grid>
+        {coatOfArms.png && (
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h4" className={classes.cardTitle}>
+                  Coat of Arms
+                </Typography>
+                <CardMedia
+                  className={classes.flag}
+                  image={coatOfArms.png}
+                  title={`${name.common} Coat of Arms`}
                 />
-              </div>
-            </div>
-          </div>
-          {coatOfArms.png && (
-            <div className="col-lg-6 col-md-6 col-sm-12">
-              <div className="card">
-                <div className="card-body text-center">
-                  <h4 className="card-title">Coat of Arms</h4>
-                  <img
-                    src={coatOfArms.png}
-                    alt="Not Found"
-                    style={{ height: "180px" }}
-                    className="img-fluid"
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-        <hr />
-        <div className="row w-100 mt-3 d-flex flew-row justify-content-center align-items-center h-100">
-          <div className="col-md-12 col-lg-12 col-sm-12">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">Details</h4>
-                <div className="row">
-                  <div className="col-lg-6 col-sm-12 col-md-12 col-xs-12">
-                    <ul className="list-group">
-                      <li className="list-group-item d-flex align-items-center">
-                        <i className="bi bi-globe mr-2"></i>
-                        <strong>Region:&nbsp;</strong> {region}
-                      </li>
-                      <li className="list-group-item d-flex align-items-center">
-                        <i className="bi bi-building mr-2"></i>
-                        <strong>Capital:&nbsp;</strong> {capital}
-                      </li>
-                      <li className="list-group-item d-flex align-items-center">
-                        <i className="bi bi-geo-alt mr-2"></i>
-                        <strong>Area:&nbsp;</strong> {area}
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="col-lg-6 col-sm-12 col-md-12 col-xs-12">
-                    <ul className="list-group">
-                      <li className="list-group-item d-flex align-items-center">
-                        <i className="bi bi-people mr-2"></i>
-                        <strong>Population:&nbsp;</strong> {population}
-                      </li>
-                      <li className="list-group-item d-flex align-items-center">
-                        <i className="bi bi-translate mr-2"></i>
-                        <strong>Languages:&nbsp;</strong>{" "}
-                        {languages
-                          ? Object.values(languages)
-                              .map((language) => language)
-                              .join(", ")
-                          : "N/A"}
-                      </li>
-                      <li className="list-group-item d-flex align-items-center">
-                        <i className="bi bi-currency-dollar mr-2"></i>
-                        <strong>Currencies:&nbsp;</strong>
-                        {currencies
-                          ? Object.values(currencies)
-                              .map((currency) => currency.name)
-                              .join(", ")
-                          : "N/A"}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row w-100 d-flex align-items-center justify-content-center mt-3">
-          <div className="col-md-6 col-lg-6 col-sm-6">
-            <div className="card">
-              <div className="card-body">
-                <h4 className="card-title">Map of {name.common}</h4>
-                <p className="alert alert-info">
-                  Click on the image to open Google Maps
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-6 col-lg-6 col-sm-6">
-            <div className="card p-3">
+              </CardContent>
+            </Card>
+          </Grid>
+        )}
+      </Grid>
+      <hr />
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h4" className={classes.cardTitle}>
+                Details
+              </Typography>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                  <ul>
+                    <li>
+                      <strong>Region:</strong> {region}
+                    </li>
+                    <li>
+                      <strong>Capital:</strong> {capital}
+                    </li>
+                    <li>
+                      <strong>Area:</strong> {area}
+                    </li>
+                    <li>
+                      <strong>Population:</strong> {population}
+                    </li>
+                  </ul>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <ul>
+                    <li>
+                      <strong>Languages:</strong>{" "}
+                      {languages ? Object.values(languages).join(", ") : "N/A"}
+                    </li>
+                    <li>
+                      <strong>Currencies:</strong>{" "}
+                      {currencies
+                        ? Object.values(currencies).map(
+                            (currency) => currency.name
+                          )
+                        : "N/A"}
+                    </li>
+                  </ul>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+      <hr />
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={6}>
+          <Card>
+            <CardContent>
+              <Typography variant="h4" className={classes.cardTitle}>
+                Map of {name.common}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" paragraph>
+                Click on the image to open Google Maps
+              </Typography>
               <img
                 src={`https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/geojson(%7B%22type%22%3A%22Point%22%2C%22coordinates%22%3A%5B${latlng[1]}%2C${latlng[0]}%5D%7D)/${latlng[1]},${latlng[0]},4,0/600x400?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
-                alt="N/A"
+                alt="Map of the country"
+                className={classes.mapImage}
                 onClick={() => {
                   window.open(googleMaps);
                 }}
-                style={{ cursor: "pointer" }}
               />
-            </div>
-          </div>
-        </div>
-        <div className="row mt-3">
-          <div className="card p-3">
-            <div className="card-title">
-              <h3 className="text-center">Popular Food</h3>
-            </div>
-            <div className="card-body">
-              <div className="row">
-                <div className="row row-cols-1 row-cols-md-3 g-4">
-                  {foods.map((food, index) => (
-                    <div className="col" key={index}>
-                      <div className="card h-100" style={{ border: "none" }}>
-                        <img src={food} className="card-img-top" alt="food" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <small className="float-right">
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Card className={classes.foodCard}>
+            <CardContent>
+              <Typography variant="h4" className={classes.cardTitle}>
+                Popular Food
+              </Typography>
+              <Grid container spacing={2}>
+                {foods.map((food, index) => (
+                  <Grid item key={index} xs={12} md={4}>
+                    <Card>
+                      <CardMedia
+                        component="img"
+                        image={food}
+                        title={name.common}
+                      />
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+              <Typography variant="body2" color="textSecondary">
                 Source:{" "}
-                <a
+                <Link
                   href="https://www.chefspencil.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {" "}
                   Chefspencil
-                </a>
+                </Link>
                 ,{" "}
-                <a
+                <Link
                   href="https://unsplash.com/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Unsplash
-                </a>
-              </small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+                </Link>
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
+
 export default Country;
